@@ -1,7 +1,22 @@
 #include "vetor.h"
 #include <stdio.h>
 #include <stdlib.h>
+typedef struct{
+  Ponto *pontos;
+  uint qtd;
+} Vetor10Pontos;
 
+int adicionar(Vetor10Pontos* v, Ponto a){
+
+  Ponto *temp = (Ponto*)realloc(v->pontos, (v->qtd+1)*sizeof(Ponto));
+  if(temp!=NULL){
+    v->pontos = temp;
+    v->pontos[v->qtd] = a;
+    v->qtd++;
+    return 1;
+  }
+  return 0;
+}
 int main(int argc, char const *argv[]) {
 
   /*Vetor v = {0, NULL};
@@ -14,10 +29,6 @@ int main(int argc, char const *argv[]) {
     puts("ok para b");
   }
   Vetor_print(&v);*/
-  typedef struct{
-    Ponto *pontos;
-    uint qtd;
-  } Vetor10Pontos;
 
   Vetor10Pontos v;
   v.qtd = 0;
@@ -30,15 +41,12 @@ int main(int argc, char const *argv[]) {
     scanf("%u", &op);
     switch (op) {
       case 1:
-        temp = (Ponto*)realloc(v.pontos, (v.qtd+1)*sizeof(Ponto));
-      if(temp!=NULL){
-        v.pontos = temp;
         puts("Entre com o ponto(x,y): ");
         scanf("%u %u", &(a.x),&(a.y));
-        v.pontos[v.qtd] = a;
-        v.qtd++;
-      }else
-        puts("Falta de memória!"); break;
+        if(adicionar(&v, a))
+          puts("Adicionado com sucesso!");
+        else
+          puts("Falta de memória!"); break;
       case 2: for(i=0; i< v.qtd; i++){
         printf("\n[%u] = (x=%u, y=%u), ", i, v.pontos[i].x, v.pontos[i].y);
       } putchar('\n'); break;
